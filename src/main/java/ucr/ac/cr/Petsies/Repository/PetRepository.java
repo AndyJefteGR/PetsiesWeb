@@ -57,21 +57,27 @@ public class PetRepository {
 
     }
 
-    public Pet editPet (Integer id, Pet petEdit){
-
-
-        for (int i = 0; i < petList.size(); i++) {
-
-            if (petList.get(i).getIdPet() == id) {
-
-                petList.set(i, petEdit);
-                return petEdit;
+    public Pet editPet (Integer id, Pet editPet){
+        for (int i = 0; i < this.petList.size(); i++) {
+            if (((Pet)this.petList.get(i)).getIdPet() == id){
+                this.petList.set(i, editPet);
+                return (Pet)this.petList.get(i);
 
             }
         }
 
         return new Pet();
 
+    }
+
+    public Boolean existPetId(Integer id) {
+        for(int i = 0; i < this.petList.size(); ++i) {
+            if (((Pet)this.petList.get(i)).getIdPet() == id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
