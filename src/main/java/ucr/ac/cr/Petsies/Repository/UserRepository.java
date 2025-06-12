@@ -4,9 +4,10 @@ import org.springframework.stereotype.Repository;
 import ucr.ac.cr.Petsies.Model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
-public class UserRepository {
+public class UserRepository implements IUserRegister {
 
     private ArrayList<User> userList;
 
@@ -16,12 +17,13 @@ public class UserRepository {
 
     }
 
-    public User add(User user){
+    public User addUser(User user){
 
         this.userList.add(user);
         return user;
 
     }
+
 
     public User findUser(Integer id){
 
@@ -38,11 +40,11 @@ public class UserRepository {
 
     }
 
-    public ArrayList<User> getAllUsers(){
+    public ArrayList<User> getUsers(){
         return this.userList;
     }
 
-    public User deleteByID(Integer id){
+    public User deleteById(Integer id){
         
         User user = this.findUser(id);
         
@@ -73,4 +75,16 @@ public class UserRepository {
         return new User();
         
     }
+
+    public Boolean existID(Integer id) {
+        for (int i = 0; i < this.userList.size(); ++i) {
+            if (((User) this.userList.get(i)).getId() == id) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
 }
