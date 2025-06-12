@@ -31,6 +31,7 @@ public class Petcontroller {
                 Pet addPet = this.petService.addPet(pet);
                 return ResponseEntity.status(HttpStatus.CREATED).body(addPet);
             }
+
         }else{
             Map<String, String> errors = new HashMap<>();
 
