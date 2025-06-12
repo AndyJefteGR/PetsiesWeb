@@ -1,12 +1,19 @@
 package ucr.ac.cr.Petsies.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ucr.ac.cr.Petsies.Model.Pet;
 import ucr.ac.cr.Petsies.Model.Pet;
 import ucr.ac.cr.Petsies.Service.PetService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pets")
@@ -16,34 +23,64 @@ public class Petcontroller {
     PetService petService;
 
     @PostMapping
-    public Pet addUser(@RequestBody Pet pet){
-        return this.petService.addPet(pet);
+    public ResponseEntity<?> addPet(@Validated @RequestBody Pet pet, BindingResult result){
+        if (!result.hasErrors()){
+            if(this.petService.existPetId(pet.getIdPet())){
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el ID " + pet.getIdPet() + " ya se encuentra registrada.");
+            }else{
+                Pet addPet = this.petService.addPet(pet);
+                return ResponseEntity.status(HttpStatus.CREATED).body(addPet);
+            }
+
+        }else{
+            Map<String, String> errors = new HashMap<>();
+
+            for(FieldError error : result.getFieldErrors()){
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
 
     }
 
     @GetMapping("/{id}")
-    public Pet findPet(@PathVariable Integer id){
-
-        return this.petService.findPet(id);
+    public ResponseEntity<?> findPet(@PathVariable Integer id){
+        Pet pet = this.petService.findPet(id);
+        return pet != null && pet.getIdPet() != 0 ? ResponseEntity.ok(pet) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con el ID "+ id + " no fue encontrada.");
     }
 
     @GetMapping
-    public ArrayList<Pet> getUsers(){
+    public ArrayList<Pet> getPets(){
 
         return this.petService.getPets();
     }
 
     @DeleteMapping("/{id}")
-    public Pet deletePet( @PathVariable Integer id){
-
-        return this.petService.deleteById(id);
+    public ResponseEntity<?> deletePet( @PathVariable Integer id){
+        if(this.petService.existPetId(id)){
+            this.petService.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("La mascota con el ID " + id + " fue eliminada correctamente.");
+        }else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no se encuentra registrada.");
+        }
     }
 
     @PutMapping("/{id}")
-    public Pet editPet( @PathVariable Integer id, @RequestBody Pet pet){
+    public ResponseEntity<?> editPet(@Validated @PathVariable Integer id, @RequestBody Pet editPet, BindingResult result){
+        if(!result.hasErrors()){
+            if(this.petService.existPetId(id)){
+                return id != editPet.getIdPet() ? ResponseEntity.status(HttpStatus.CONFLICT).body("") : ResponseEntity.ok(this.petService.editPet(id, editPet));
+            }else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no se encuentra registrada.");
+            }
+        }else {
+            Map<String, String> errors = new HashMap<>();
 
-        return this.petService.editPet(id, pet);
-
+            for(FieldError error : result.getFieldErrors()){
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
     }
 
 

@@ -37,10 +37,21 @@ public class PetService {
         return this.petRepository.deleteByID(id);
     }
 
-
-    public Pet editPet(Integer id, Pet pet){
-
-        return this.petRepository.editPet(id, pet);
+    public Pet editPet(Integer id, Pet editPet){
+        return this.petRepository.editPet(id, editPet);
     }
+
+    public boolean existPetId(Integer id){
+        return this.petRepository.existPetId(id);
+    }
+
+
+
+
+
+
+
+
+
 
 }
