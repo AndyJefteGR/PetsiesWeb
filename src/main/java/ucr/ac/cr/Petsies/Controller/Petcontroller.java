@@ -69,7 +69,7 @@ public class Petcontroller {
     public ResponseEntity<?> editPet(@Validated @PathVariable Integer id, @RequestBody Pet editPet, BindingResult result){
         if(!result.hasErrors()){
             if(this.petService.existPetId(id)){
-                return id != editPet.getIdPet() ? ResponseEntity.status(HttpStatus.CONFLICT).body("") : ResponseEntity.ok(this.petService.editPet(id, editPet));
+                return id != editPet.getIdPet() ? ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no coincide con el ingresado.") : ResponseEntity.ok(this.petService.editPet(id, editPet));
             }else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no se encuentra registrada.");
             }
