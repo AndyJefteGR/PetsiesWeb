@@ -42,6 +42,7 @@ public class PetService {
 
         this.iPetRepository.deleteById(id);
 
+
     }
 
     public Pet editPet(Integer id, Pet user){
@@ -65,5 +66,7 @@ public class PetService {
         pet.setOwner(userOptional.get());
         return iPetRepository.save(pet);
     }
+
+
 
 }

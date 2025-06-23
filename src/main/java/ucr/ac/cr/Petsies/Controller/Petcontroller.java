@@ -25,7 +25,7 @@ public class Petcontroller {
             Pet savedPet = petService.addPetToUser(id, pet);
 
             if (savedPet == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Por favor digite toda la informacion.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Por favor ingrese toda la informacion.");
             }
 
             return ResponseEntity.ok(savedPet);
@@ -53,19 +53,21 @@ public class Petcontroller {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet( @PathVariable Integer id){
-        if(this.petService.existPetId(id)){
+        Optional<Pet> petFind = this.petService.findPet(id);
+        if (petFind.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con la ID " + id + " no existe");
+        } else {
             this.petService.deletePetById(id);
-            return ResponseEntity.status(HttpStatus.OK).body("La mascota con el ID " + id + " fue eliminada correctamente.");
-        }else{
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no se encuentra registrada.");
+            return ResponseEntity.noContent().build();
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editPet(@Validated @PathVariable Integer id, @RequestBody Pet editPet, BindingResult result){
         if(!result.hasErrors()){
-            if(this.petService.existPetId(id)){
-                return id != editPet.getIdPet() ? ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no coincide con el ingresado.") : ResponseEntity.ok(this.petService.editPet(id, editPet));
+            if(!result.hasErrors()){
+                Optional<Pet> petFind = this.petService.findPet(id);
+                return !petFind.isPresent() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con el ID " + id + " no existe!") : ResponseEntity.ok(this.petService.editPet(id, editPet));
             }else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no se encuentra registrada.");
             }
