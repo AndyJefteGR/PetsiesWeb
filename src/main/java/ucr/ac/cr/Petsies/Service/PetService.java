@@ -39,7 +39,16 @@ public class PetService {
 
     }
 
+    public Pet editPet(Integer id, Pet user){
+        Optional<Pet> userOptional = this.iPetRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return new Pet();
+        }
 
+        this.iPetRepository.deleteById(id);
+        return this.iPetRepository.save(user);
+
+    }
 
 
 
