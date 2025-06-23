@@ -3,7 +3,9 @@ package ucr.ac.cr.Petsies.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucr.ac.cr.Petsies.Model.Pet;
+import ucr.ac.cr.Petsies.Model.User;
 import ucr.ac.cr.Petsies.Repository.IPetRepository;
+import ucr.ac.cr.Petsies.Repository.IUserRegister;
 
 
 import java.util.List;
@@ -15,6 +17,9 @@ public class PetService {
 
     @Autowired
     IPetRepository iPetRepository;
+
+    @Autowired
+    private IUserRegister userRegister;
 
     public Pet addPet(Pet pet){
         return this.iPetRepository.save(pet);
@@ -50,12 +55,15 @@ public class PetService {
 
     }
 
+    public Pet addPetToUser(Integer userId, Pet pet) {
+        Optional<User> userOptional = userRegister.findById(userId);
 
+        if (userOptional.isEmpty()) {
+            return null;
+        }
 
-
-
-
-
-
+        pet.setOwner(userOptional.get());
+        return iPetRepository.save(pet);
+    }
 
 }

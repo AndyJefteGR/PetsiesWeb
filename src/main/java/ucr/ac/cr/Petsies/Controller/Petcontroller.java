@@ -19,25 +19,24 @@ public class Petcontroller {
     @Autowired
     PetService petService;
 
-    @PostMapping
-    public ResponseEntity<?> addPet(@Validated @RequestBody Pet pet, BindingResult result){
-        if (!result.hasErrors()){
-            if(this.petService.existPetId(pet.getIdPet())){
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el ID " + pet.getIdPet() + " ya se encuentra registrada.");
-            }else{
-                Pet addPet = this.petService.addPet(pet);
-                return ResponseEntity.status(HttpStatus.CREATED).body(addPet);
+    @PostMapping("/user/{id}/register")
+    public ResponseEntity<?> registerPet(@Validated @PathVariable Integer id, @RequestBody Pet pet, BindingResult result) {
+        if (!result.hasErrors()) {
+            Pet savedPet = petService.addPetToUser(id, pet);
+
+            if (savedPet == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Por favor digite toda la informacion.");
             }
 
-        }else{
+            return ResponseEntity.ok(savedPet);
+        } else {
             Map<String, String> errors = new HashMap<>();
 
-            for(FieldError error : result.getFieldErrors()){
+            for (FieldError error : result.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
             return ResponseEntity.badRequest().body(errors);
         }
-
     }
 
     @GetMapping("/{id}")
