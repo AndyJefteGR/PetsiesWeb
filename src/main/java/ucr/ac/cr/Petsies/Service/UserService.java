@@ -6,6 +6,7 @@ import ucr.ac.cr.Petsies.Model.User;
 import ucr.ac.cr.Petsies.Repository.IUserRegister;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -14,37 +15,18 @@ public class UserService {
     IUserRegister userRegister;
 
     public User addUser(User user){
-        return this.userRegister.addUser(user);
+        if (userRegister.existByEmail(user.getEmail())){
+            return null;
+        }
+
+        userRegister.save(user);
+        return null;
 
     }
 
-    public User findUser(Integer id){
-
-        return this.userRegister.findUser(id);
-
-    }
-
-    public ArrayList<User> getUsers(){
-
-        return this.userRegister.getUsers();
-
-    }
-
-    public User deleteById(Integer id){
-
-        return this.userRegister.deleteById(id);
-    }
-
-
-    public User editUser(Integer id, User user){
-
-        return this.userRegister.editUser(id, user);
-    }
-
-    public Boolean existID(Integer id){
-
-        return this.userRegister.existID(id);
-
+    public boolean login(String email, String password){
+        Optional<User> optionalUser = userRegister.findByEmail(email);
+        return optionalUser.isPresent() && optionalUser.get().getPassword().equals(password);
     }
 
 }
