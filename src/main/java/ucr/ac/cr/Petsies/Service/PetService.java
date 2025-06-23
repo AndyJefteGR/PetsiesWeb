@@ -6,45 +6,49 @@ import ucr.ac.cr.Petsies.Model.Pet;
 import ucr.ac.cr.Petsies.Repository.IPetRepository;
 
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class PetService {
 
     @Autowired
-    IPetRepository IpetRepository;
+    IPetRepository iPetRepository;
 
     public Pet addPet(Pet pet){
-        return this.IpetRepository.add(pet);
+        return this.iPetRepository.save(pet);
 
     }
 
-    public Pet findPet(Integer id){
+    public Optional<Pet> findPet(Integer id){
 
-        return this.IpetRepository.findPet(id);
-
-    }
-
-    public ArrayList<Pet> getPets(){
-
-        return this.IpetRepository.getAllPets();
+        return this.iPetRepository.findById(id);
 
     }
 
-    public Pet deleteById(Integer id){
+    public List<Pet> getPets(){
 
-        return this.IpetRepository.deleteByID(id);
+        return this.iPetRepository.findAll();
+
     }
 
-    public Pet editPet(Integer id, Pet editPet){
-        return this.IpetRepository.editPet(id, editPet);
+    public void deletePetById(Integer id){
+
+        this.iPetRepository.deleteById(id);
+
     }
 
-    public boolean existPetId(Integer id){
-        return this.IpetRepository.existPetId(id);
-    }
+    public Pet editPet(Integer id, Pet user){
+        Optional<Pet> userOptional = this.iPetRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return new Pet();
+        }
 
+        this.iPetRepository.deleteById(id);
+        return this.iPetRepository.save(user);
+
+    }
 
 
 

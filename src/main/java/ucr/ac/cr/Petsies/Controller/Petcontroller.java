@@ -8,12 +8,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ucr.ac.cr.Petsies.Model.Pet;
-import ucr.ac.cr.Petsies.Model.Pet;
 import ucr.ac.cr.Petsies.Service.PetService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/pets")
@@ -45,12 +42,12 @@ public class Petcontroller {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findPet(@PathVariable Integer id){
-        Pet pet = this.petService.findPet(id);
-        return pet != null && pet.getIdPet() != 0 ? ResponseEntity.ok(pet) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con el ID "+ id + " no fue encontrada.");
+        Optional<Pet> pet = this.petService.findPet(id);
+        return pet.isPresent() && pet.get().getIdPet() != 0 ? ResponseEntity.ok(pet) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con el ID "+ id + " no fue encontrada.");
     }
 
     @GetMapping
-    public ArrayList<Pet> getPets(){
+    public List<Pet> getPets(){
 
         return this.petService.getPets();
     }
@@ -58,7 +55,7 @@ public class Petcontroller {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet( @PathVariable Integer id){
         if(this.petService.existPetId(id)){
-            this.petService.deleteById(id);
+            this.petService.deletePetById(id);
             return ResponseEntity.status(HttpStatus.OK).body("La mascota con el ID " + id + " fue eliminada correctamente.");
         }else{
             return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota con el id " + id + " no se encuentra registrada.");
