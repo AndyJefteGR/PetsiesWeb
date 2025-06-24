@@ -53,7 +53,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet( @PathVariable Integer id){
         Optional<User> petFind = this.userService.getUserById(id);
-        if (petFind.isEmpty()) {
+        if (petFind.isPresent()) {
             this.userService.deleteUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body("El usuario con el ID " + id + " fue eliminado correctamente.");
         }else{

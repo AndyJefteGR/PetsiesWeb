@@ -17,7 +17,7 @@ public class UserService {
     IUserRegister userRegister;
 
     public User addUser(User user){
-        if (userRegister.existByEmail(user.getEmail())){
+        if (userRegister.existsByEmail(user.getEmail())){
             return null;
         }
 
@@ -49,8 +49,15 @@ public class UserService {
             return new User();
         }
 
-        this.userRegister.deleteById(id);
-        return this.userRegister.save(user);
+        User previousUser = userOptional.get();
+
+        previousUser.setName(user.getName());
+        previousUser.setName(user.getPassword());
+        previousUser.setEmail(user.getEmail());
+        previousUser.setNum_tel(user.getNum_tel());
+
+
+        return this.userRegister.save(previousUser);
 
     }
 

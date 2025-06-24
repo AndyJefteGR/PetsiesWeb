@@ -11,5 +11,5 @@ public interface IUserRegister extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    boolean existByEmail(String email);
+    boolean existsByEmail(String email);
 }

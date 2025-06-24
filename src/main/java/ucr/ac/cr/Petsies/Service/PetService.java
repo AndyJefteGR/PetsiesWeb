@@ -45,14 +45,21 @@ public class PetService {
 
     }
 
-    public Pet editPet(Integer id, Pet user){
-        Optional<Pet> userOptional = this.iPetRepository.findById(id);
-        if (userOptional.isEmpty()) {
+    public Pet editPet(Integer id, Pet pet){
+        Optional<Pet> petOptional = this.iPetRepository.findById(id);
+        if (petOptional.isEmpty()) {
             return new Pet();
         }
 
-        this.iPetRepository.deleteById(id);
-        return this.iPetRepository.save(user);
+        Pet previousPet = petOptional.get();
+
+
+        previousPet.setAge(pet.getAge());
+        previousPet.setName(pet.getName());
+        previousPet.setDescription(pet.getDescription());
+        previousPet.setWeight(pet.getWeight());
+
+        return this.iPetRepository.save(previousPet);
 
     }
 
