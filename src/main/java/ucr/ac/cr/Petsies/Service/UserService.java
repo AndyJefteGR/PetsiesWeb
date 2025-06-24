@@ -2,49 +2,62 @@ package ucr.ac.cr.Petsies.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ucr.ac.cr.Petsies.Model.Pet;
 import ucr.ac.cr.Petsies.Model.User;
 import ucr.ac.cr.Petsies.Repository.IUserRegister;
-import ucr.ac.cr.Petsies.Repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserService implements IUserRegister {
+public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    IUserRegister userRegister;
 
     public User addUser(User user){
-        return this.userRepository.addUser(user);
+        if (userRegister.existsByEmail(user.getEmail())){
+            return null;
+        }
+
+        userRegister.save(user);
+        return null;
 
     }
 
-    public User findUser(Integer id){
-
-        return this.userRepository.findUser(id);
-
+    public boolean login(String email, String password){
+        Optional<User> optionalUser = userRegister.findByEmail(email);
+        return optionalUser.isPresent() && optionalUser.get().getPassword().equals(password);
     }
 
-    public ArrayList<User> getUsers(){
-
-        return this.userRepository.getUsers();
-
+    public List<User> getAllUsers() {
+        return userRegister.findAll();
     }
 
-    public User deleteById(Integer id){
-
-        return this.userRepository.deleteById(id);
+    public Optional<User> getUserById(Integer id) {
+        return userRegister.findById(id);
     }
 
+    public void deleteUserById(Integer id) {
+        userRegister.deleteById(id);
+    }
 
     public User editUser(Integer id, User user){
+        Optional<User> userOptional = this.userRegister.findById(id);
+        if (userOptional.isEmpty()) {
+            return new User();
+        }
 
-        return this.userRepository.editUser(id, user);
-    }
+        User previousUser = userOptional.get();
 
-    public Boolean existID(Integer id){
+        previousUser.setName(user.getName());
+        previousUser.setName(user.getPassword());
+        previousUser.setEmail(user.getEmail());
+        previousUser.setNum_tel(user.getNum_tel());
 
-        return this.userRepository.existID(id);
+
+        return this.userRegister.save(previousUser);
 
     }
 

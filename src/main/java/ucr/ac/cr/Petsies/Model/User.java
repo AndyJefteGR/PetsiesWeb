@@ -1,7 +1,15 @@
 package ucr.ac.cr.Petsies.Model;
 
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private  String name;
     private String password;
@@ -27,6 +35,9 @@ public class User {
         this.num_tel = num_tel;
 
     }
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pet> pets = new ArrayList<>();
 
     public Integer getId() {
 
@@ -88,4 +99,13 @@ public class User {
         this.num_tel = num_tel;
 
     }
+
+    public List<Pet> getPets(List<Pet> pets){
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets){
+        this.pets = pets;
+    }
+
 }

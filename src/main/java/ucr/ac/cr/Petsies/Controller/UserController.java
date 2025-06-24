@@ -11,9 +11,7 @@ import ucr.ac.cr.Petsies.Model.Pet;
 import ucr.ac.cr.Petsies.Model.User;
 import ucr.ac.cr.Petsies.Service.UserService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -25,20 +23,16 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> addUser(@Validated @RequestBody User user, BindingResult result){
-        if (!result.hasErrors()){
-            if(this.userService.existID(user.getId())){
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID " + user.getId() + " ya se encuentra registrada.");
-            }else{
-                User addUser = this.userService.addUser(user);
-                return ResponseEntity.status(HttpStatus.CREATED).body(addUser);
-            }
+        if (!result.hasErrors()) {
+            Optional<User> userOp = this.userService.getUserById(user.getId());
+            return userOp.isPresent() ? ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID " + user.getId() + " ya existe!") : ResponseEntity.status(HttpStatus.CREATED).body(this.userService.addUser(user));
+        } else {
+            Map<String, String> errors = new HashMap();
 
-        }else{
-            Map<String, String> errors = new HashMap<>();
-
-            for(FieldError error : result.getFieldErrors()){
+            for(FieldError error : result.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
+
             return ResponseEntity.badRequest().body(errors);
         }
 
@@ -46,20 +40,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findUser(@PathVariable Integer id){
-        User user = this.userService.findUser(id);
-        return user != null && user.getId() != 0 ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario con el ID "+ id + " no fue encontrado.");
+        Optional<User> user = this.userService.getUserById(id);
+        return user != null && user.get().getId() != 0 ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario con el ID "+ id + " no fue encontrado.");
     }
 
     @GetMapping
-    public ArrayList<User> getUsers(){
+    public List<User> getUsers(){
 
-        return this.userService.getUsers();
+        return this.userService.getAllUsers();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet( @PathVariable Integer id){
-        if(this.userService.existID(id)){
-            this.userService.deleteById(id);
+        Optional<User> petFind = this.userService.getUserById(id);
+        if (petFind.isPresent()) {
+            this.userService.deleteUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body("El usuario con el ID " + id + " fue eliminado correctamente.");
         }else{
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el id " + id + " no se encuentra registrado.");
@@ -69,8 +64,9 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> editPet(@Validated @PathVariable Integer id, @RequestBody User editUser, BindingResult result){
         if(!result.hasErrors()){
-            if(this.userService.existID(id)){
-                return id != editUser.getId() ? ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el id " + id + " no coincide con el ingresado.") : ResponseEntity.ok(this.userService.editUser(id, editUser));
+            if(!result.hasErrors()){
+                Optional<User> userFind = this.userService.getUserById(id);
+                return !userFind.isPresent() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario con el ID " + id + " no existe!") : ResponseEntity.ok(this.userService.editUser(id, editUser));
             }else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el id " + id + " no se encuentra registrado.");
             }

@@ -1,13 +1,17 @@
 package ucr.ac.cr.Petsies.Model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Pet {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPet;
     private Integer age;
     private String name;
     private String description;
     private Double weight;
-
 
     public Pet() {
         this.idPet = 0;
@@ -24,6 +28,10 @@ public class Pet {
         this.description = description;
         this.weight = weight;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     public Integer getIdPet() {
 
@@ -84,4 +92,13 @@ public class Pet {
         this.weight = weight;
 
     }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
 }
