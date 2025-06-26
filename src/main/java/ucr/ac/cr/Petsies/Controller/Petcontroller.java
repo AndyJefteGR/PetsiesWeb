@@ -8,9 +8,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ucr.ac.cr.Petsies.Model.Pet;
+import ucr.ac.cr.Petsies.Model.PetDTO;
+import ucr.ac.cr.Petsies.Model.OwnerDTO;
 import ucr.ac.cr.Petsies.Service.PetService;
 
 import java.util.*;
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 
 @RestController
 @RequestMapping("/api/pets")
@@ -41,15 +44,37 @@ public class Petcontroller {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findPet(@PathVariable Integer id){
-        Optional<Pet> pet = this.petService.findPet(id);
-        return pet.isPresent() && pet.get().getIdPet() != 0 ? ResponseEntity.ok(pet) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con el ID "+ id + " no fue encontrada.");
+        Optional<Pet> petOptional = this.petService.findPet(id);
+
+        if (petOptional.isPresent()) {
+            Pet pet = petOptional.get();
+            OwnerDTO ownerDTO = pet.getOwner() != null
+                    ? new OwnerDTO(pet.getOwner().getId(), pet.getOwner().getName())
+                    : null;
+
+            PetDTO petDTO = new PetDTO(
+                    pet.getIdPet(),
+                    pet.getAge(),
+                    pet.getName(),
+                    pet.getDescription(),
+                    pet.getWeight(),
+                    pet.getPhotoUrl(),
+                    ownerDTO
+            );
+
+            return ResponseEntity.ok(petDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La mascota con el ID " + id + " no fue encontrada.");
+        }
     }
+
 
     @GetMapping
-    public List<Pet> getPets(){
-
-        return this.petService.getPets();
+    public ResponseEntity<List<PetDTO>> getPets() {
+        List<PetDTO> petDTOs = petService.getAllPetDTOs();
+        return ResponseEntity.ok(petDTOs);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet( @PathVariable Integer id){
