@@ -43,9 +43,13 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findUser(@PathVariable Integer id){
+    public ResponseEntity<?> findUser(@PathVariable Integer id) {
         Optional<User> user = this.userService.getUserById(id);
-        return user != null && user.get().getId() != 0 ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario con el ID "+ id + " no fue encontrado.");
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario con el ID " + id + " no fue encontrado.");
+        }
     }
 
     @GetMapping
@@ -65,7 +69,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/pet/{id}")
     public ResponseEntity<?> editPet(@Validated @PathVariable Integer id, @RequestBody User editUser, BindingResult result){
         if(!result.hasErrors()){
             if(!result.hasErrors()){
@@ -99,6 +103,25 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Correo o contraseña incorrectos.");
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
+        Optional<User> userOp = userService.getUserById(id);
+        if (userOp.isPresent()) {
+            User user = userOp.get();
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            user.setNum_tel(updatedUser.getNum_tel());
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
+                user.setPassword(updatedUser.getPassword());
+            }
+            userService.addUser(user);
+            return ResponseEntity.ok("Usuario actualizado.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+    }
+
 
 
 }
