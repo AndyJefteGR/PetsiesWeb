@@ -11,6 +11,7 @@ public class Pet {
     private Integer age;
     private String name;
     private String description;
+    private String species;
     private Double weight;
     private String photoUrl;
 
@@ -83,6 +84,14 @@ public class Pet {
 
         this.description = description;
 
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public Double getWeight() {

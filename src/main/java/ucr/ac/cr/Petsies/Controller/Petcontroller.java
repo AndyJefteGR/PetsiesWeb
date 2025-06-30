@@ -75,6 +75,14 @@ public class Petcontroller {
         return ResponseEntity.ok(petDTOs);
     }
 
+      @GetMapping("/pets/{specie}")
+    public ResponseEntity<?> filterPetsBySpecie(@PathVariable String specie) {
+        List<Pet> findSpecie = petService.getPetsBySpecie(specie);
+
+        return findSpecie.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay aun ninguna mascota de la especie solicitada: " + specie) : ResponseEntity.ok(findSpecie);
+    }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet( @PathVariable Integer id){

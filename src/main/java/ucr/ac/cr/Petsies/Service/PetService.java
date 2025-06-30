@@ -77,6 +77,12 @@ public class PetService {
         return iPetRepository.save(pet);
     }
 
+
+      public List<Pet> getPetsBySpecie(String specie) {
+        return iPetRepository.findBySpecie(specie);
+    }
+
+  
     public List<PetDTO> getAllPetDTOs() {
         List<Pet> pets = getPets();
         List<PetDTO> petDTOs = new ArrayList<>();
@@ -98,6 +104,7 @@ public class PetService {
         }
         return petDTOs;
     }
+
 
 
 }
