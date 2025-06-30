@@ -22,21 +22,25 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public ResponseEntity<?> addUser(@Validated @RequestBody User user, BindingResult result){
+    public ResponseEntity<?> addUser(@Validated @RequestBody User user, BindingResult result) {
         if (!result.hasErrors()) {
-            Optional<User> userOp = this.userService.getUserById(user.getId());
-            return userOp.isPresent() ? ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID " + user.getId() + " ya existe!") : ResponseEntity.status(HttpStatus.CREATED).body(this.userService.addUser(user));
-        } else {
-            Map<String, String> errors = new HashMap();
+            Optional<User> existingUser = this.userService.getUserByEmail(user.getEmail());
 
-            for(FieldError error : result.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
+            if (existingUser.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("El correo " + user.getEmail() + " ya está registrado.");
             }
 
+            return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.addUser(user));
+        } else {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
             return ResponseEntity.badRequest().body(errors);
         }
-
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findUser(@PathVariable Integer id){

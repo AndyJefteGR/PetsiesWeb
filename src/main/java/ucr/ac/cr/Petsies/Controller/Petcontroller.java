@@ -49,7 +49,7 @@ public class Petcontroller {
         if (petOptional.isPresent()) {
             Pet pet = petOptional.get();
             OwnerDTO ownerDTO = pet.getOwner() != null
-                    ? new OwnerDTO(pet.getOwner().getId(), pet.getOwner().getName())
+                    ? new OwnerDTO(pet.getOwner().getId(), pet.getOwner().getName(), pet.getOwner().getNum_tel())
                     : null;
 
             PetDTO petDTO = new PetDTO(

@@ -61,4 +61,9 @@ public class UserService {
 
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        return userRegister.findByEmail(email);
+    }
+
+
 }

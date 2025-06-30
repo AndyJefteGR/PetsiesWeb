@@ -90,7 +90,7 @@ public class PetService {
         for (Pet pet : pets) {
             OwnerDTO ownerDTO = null;
             if (pet.getOwner() != null) {
-                ownerDTO = new OwnerDTO(pet.getOwner().getId(), pet.getOwner().getName());
+                ownerDTO = new OwnerDTO(pet.getOwner().getId(), pet.getOwner().getName(), pet.getOwner().getNum_tel());
             }
             petDTOs.add(new PetDTO(
                     pet.getIdPet(),
