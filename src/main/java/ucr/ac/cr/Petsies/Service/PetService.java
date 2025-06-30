@@ -74,6 +74,10 @@ public class PetService {
         return iPetRepository.save(pet);
     }
 
+    public List<Pet> getPetsBySpecie(String specie) {
+        return iPetRepository.findBySpecie(specie);
+    }
+
 
 
 }
