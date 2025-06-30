@@ -52,7 +52,7 @@ public class UserService {
         User previousUser = userOptional.get();
 
         previousUser.setName(user.getName());
-        previousUser.setName(user.getPassword());
+        previousUser.setPassword(user.getPassword());
         previousUser.setEmail(user.getEmail());
         previousUser.setNum_tel(user.getNum_tel());
 

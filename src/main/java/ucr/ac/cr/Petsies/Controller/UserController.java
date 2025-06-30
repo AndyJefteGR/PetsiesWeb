@@ -69,8 +69,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/pet/{id}")
-    public ResponseEntity<?> editPet(@Validated @PathVariable Integer id, @RequestBody User editUser, BindingResult result){
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editUser(@Validated @PathVariable Integer id, @RequestBody User editUser, BindingResult result){
         if(!result.hasErrors()){
             if(!result.hasErrors()){
                 Optional<User> userFind = this.userService.getUserById(id);

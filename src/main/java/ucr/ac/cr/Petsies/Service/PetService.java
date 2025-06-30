@@ -60,6 +60,7 @@ public class PetService {
         previousPet.setAge(pet.getAge());
         previousPet.setName(pet.getName());
         previousPet.setDescription(pet.getDescription());
+        previousPet.setSpecies(pet.getSpecies());
         previousPet.setWeight(pet.getWeight());
 
         return this.iPetRepository.save(previousPet);
