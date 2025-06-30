@@ -108,19 +108,13 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
         Optional<User> userOp = userService.getUserById(id);
         if (userOp.isPresent()) {
-            User user = userOp.get();
-            user.setName(updatedUser.getName());
-            user.setEmail(updatedUser.getEmail());
-            user.setNum_tel(updatedUser.getNum_tel());
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
-                user.setPassword(updatedUser.getPassword());
-            }
-            userService.addUser(user);
+            userService.editUser(id, updatedUser);
             return ResponseEntity.ok("Usuario actualizado.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
         }
     }
+
 
 
 
