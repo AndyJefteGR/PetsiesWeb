@@ -26,9 +26,9 @@ public class UserService {
 
     }
 
-    public boolean login(String email, String password){
-        Optional<User> optionalUser = userRegister.findByEmail(email);
-        return optionalUser.isPresent() && optionalUser.get().getPassword().equals(password);
+
+    public Optional<User> loginUser(String email, String password) {
+        return userRegister.findByEmailAndPassword(email, password);
     }
 
     public List<User> getAllUsers() {

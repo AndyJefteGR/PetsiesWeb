@@ -80,4 +80,21 @@ public class UserController {
         }
     }
 
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        String email = credentials.get("email");
+        String password = credentials.get("password");
+
+        Optional<User> user = userService.loginUser(email, password);
+
+        if (user.isPresent()) {
+            user.get().setPassword(null);
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Correo o contraseña incorrectos.");
+        }
+    }
+
+
 }

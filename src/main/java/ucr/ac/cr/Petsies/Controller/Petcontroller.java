@@ -115,4 +115,13 @@ public class Petcontroller {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getPetsByUser(@PathVariable Integer userId) {
+        List<Pet> pets = petService.getPetsByUserId(userId);
+        if (pets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No tienes mascotas registradas.");
+        }
+        return ResponseEntity.ok(pets);
+    }
+
 }

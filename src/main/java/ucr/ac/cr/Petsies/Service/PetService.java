@@ -106,6 +106,8 @@ public class PetService {
         return petDTOs;
     }
 
-
+    public List<Pet> getPetsByUserId(Integer userId) {
+        return iPetRepository.findByOwnerId(userId);
+    }
 
 }

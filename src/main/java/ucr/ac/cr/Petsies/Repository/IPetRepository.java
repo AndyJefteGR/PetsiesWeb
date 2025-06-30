@@ -11,4 +11,6 @@ public interface IPetRepository extends JpaRepository<Pet, Integer> {
 
     List<Pet> findBySpecies(String species);
 
+    List<Pet> findByOwnerId(Integer ownerId);
+
 }
