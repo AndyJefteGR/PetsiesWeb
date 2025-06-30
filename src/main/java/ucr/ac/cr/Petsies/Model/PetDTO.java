@@ -24,11 +24,11 @@ public class PetDTO {
 
     }
 
-    public String getSpecie() {
+    public String getSpecies() {
         return species;
     }
 
-    public void setSpecie(String species) {
+    public void setSpecies(String species) {
         this.species = species;
     }
 

@@ -7,14 +7,24 @@ public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pet")
     private Integer idPet;
+    @Column(name = "age", nullable = false)
     private Integer age;
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "species", length = 10)
     private String species;
+    @Column(name = "weight")
     private Double weight;
+    @Column(name = "photo_url", length = 255)
     private String photoUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     public Pet() {
         this.idPet = 0;
@@ -36,9 +46,7 @@ public class Pet {
         this.photoUrl = photoUrl;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+
 
     public Integer getIdPet() {
 
