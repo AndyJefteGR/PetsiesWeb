@@ -2,12 +2,15 @@ package ucr.ac.cr.Petsies.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ucr.ac.cr.Petsies.Model.OwnerDTO;
 import ucr.ac.cr.Petsies.Model.Pet;
+import ucr.ac.cr.Petsies.Model.PetDTO;
 import ucr.ac.cr.Petsies.Model.User;
 import ucr.ac.cr.Petsies.Repository.IPetRepository;
 import ucr.ac.cr.Petsies.Repository.IUserRegister;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,8 +77,32 @@ public class PetService {
         return iPetRepository.save(pet);
     }
 
-    public List<Pet> getPetsBySpecie(String specie) {
+
+      public List<Pet> getPetsBySpecie(String specie) {
         return iPetRepository.findBySpecie(specie);
+    }
+
+  
+    public List<PetDTO> getAllPetDTOs() {
+        List<Pet> pets = getPets();
+        List<PetDTO> petDTOs = new ArrayList<>();
+
+        for (Pet pet : pets) {
+            OwnerDTO ownerDTO = null;
+            if (pet.getOwner() != null) {
+                ownerDTO = new OwnerDTO(pet.getOwner().getId(), pet.getOwner().getName());
+            }
+            petDTOs.add(new PetDTO(
+                    pet.getIdPet(),
+                    pet.getAge(),
+                    pet.getName(),
+                    pet.getDescription(),
+                    pet.getWeight(),
+                    pet.getPhotoUrl(),
+                    ownerDTO
+            ));
+        }
+        return petDTOs;
     }
 
 
