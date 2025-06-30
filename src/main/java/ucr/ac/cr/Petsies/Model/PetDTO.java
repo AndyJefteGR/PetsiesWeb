@@ -12,12 +12,12 @@ public class PetDTO {
 
 
 
-    public PetDTO(Integer idPet, Integer age, String name, String description, Double weight, String photoUrl, OwnerDTO owner, String specie) {
+    public PetDTO(Integer idPet, Integer age, String name, String description, Double weight, String photoUrl, OwnerDTO owner, String species) {
         this.idPet = idPet;
         this.age = age;
         this.name = name;
         this.description = description;
-        this.species = specie;
+        this.species = species;
         this.weight = weight;
         this.photoUrl = photoUrl;
         this.owner = owner;
@@ -28,8 +28,8 @@ public class PetDTO {
         return species;
     }
 
-    public void setSpecie(String specie) {
-        this.species = specie;
+    public void setSpecie(String species) {
+        this.species = species;
     }
 
     public Integer getIdPet() {

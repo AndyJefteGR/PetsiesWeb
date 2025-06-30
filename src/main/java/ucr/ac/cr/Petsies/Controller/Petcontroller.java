@@ -61,7 +61,6 @@ public class Petcontroller {
                     pet.getPhotoUrl(),
                     ownerDTO,
                     pet.getSpecies()
-
             );
 
             return ResponseEntity.ok(petDTO);
@@ -77,7 +76,7 @@ public class Petcontroller {
         return ResponseEntity.ok(petDTOs);
     }
 
-      @GetMapping("/pets/{specie}")
+    @GetMapping("/pets/{specie}")
     public ResponseEntity<?> filterPetsBySpecie(@PathVariable String specie) {
         List<Pet> findSpecie = petService.getPetsBySpecie(specie);
 
