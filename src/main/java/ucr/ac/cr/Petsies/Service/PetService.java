@@ -99,7 +99,8 @@ public class PetService {
                     pet.getDescription(),
                     pet.getWeight(),
                     pet.getPhotoUrl(),
-                    ownerDTO
+                    ownerDTO,
+                    pet.getSpecies()
             ));
         }
         return petDTOs;

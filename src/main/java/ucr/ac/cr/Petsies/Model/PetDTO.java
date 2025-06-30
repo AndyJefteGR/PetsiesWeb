@@ -5,7 +5,7 @@ public class PetDTO {
     private Integer age;
     private String name;
     private String description;
-    private String specie;
+    private String species;
     private Double weight;
     private String photoUrl;
     private OwnerDTO owner;
@@ -17,7 +17,7 @@ public class PetDTO {
         this.age = age;
         this.name = name;
         this.description = description;
-        this.specie = specie;
+        this.species = specie;
         this.weight = weight;
         this.photoUrl = photoUrl;
         this.owner = owner;
@@ -25,11 +25,11 @@ public class PetDTO {
     }
 
     public String getSpecie() {
-        return specie;
+        return species;
     }
 
     public void setSpecie(String specie) {
-        this.specie = specie;
+        this.species = specie;
     }
 
     public Integer getIdPet() {
