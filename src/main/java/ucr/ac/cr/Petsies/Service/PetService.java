@@ -79,7 +79,7 @@ public class PetService {
 
 
       public List<Pet> getPetsBySpecie(String specie) {
-        return iPetRepository.findBySpecie(specie);
+        return iPetRepository.findBySpecies(specie);
     }
 
   

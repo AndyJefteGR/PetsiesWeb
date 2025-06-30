@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface IPetRepository extends JpaRepository<Pet, Integer> {
 
-    List<Pet> findBySpecie(String specie);
+    List<Pet> findBySpecies(String species);
 
 }
