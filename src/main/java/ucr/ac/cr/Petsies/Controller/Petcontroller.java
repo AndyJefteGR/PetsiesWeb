@@ -59,7 +59,9 @@ public class Petcontroller {
                     pet.getDescription(),
                     pet.getWeight(),
                     pet.getPhotoUrl(),
-                    ownerDTO
+                    ownerDTO,
+                    pet.getSpecies()
+
             );
 
             return ResponseEntity.ok(petDTO);
