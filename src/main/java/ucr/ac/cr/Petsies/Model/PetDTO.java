@@ -5,21 +5,31 @@ public class PetDTO {
     private Integer age;
     private String name;
     private String description;
+    private String specie;
     private Double weight;
     private String photoUrl;
     private OwnerDTO owner;
 
 
 
-    public PetDTO(Integer idPet, Integer age, String name, String description, Double weight, String photoUrl, OwnerDTO owner) {
+    public PetDTO(Integer idPet, Integer age, String name, String description, Double weight, String photoUrl, OwnerDTO owner, String specie) {
         this.idPet = idPet;
         this.age = age;
         this.name = name;
         this.description = description;
+        this.specie = specie;
         this.weight = weight;
         this.photoUrl = photoUrl;
         this.owner = owner;
 
+    }
+
+    public String getSpecie() {
+        return specie;
+    }
+
+    public void setSpecie(String specie) {
+        this.specie = specie;
     }
 
     public Integer getIdPet() {

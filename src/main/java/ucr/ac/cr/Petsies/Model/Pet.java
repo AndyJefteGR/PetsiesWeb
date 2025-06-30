@@ -21,15 +21,17 @@ public class Pet {
         this.age = 0;
         this.name = "";
         this.description = "";
+        this.species = "";
         this.weight = 0.0;
         this.photoUrl = "";
     }
 
-    public Pet(Integer idPet, Integer age, String name, String description, Double weight, String photoUrl) {
+    public Pet(Integer idPet, Integer age, String name, String description, Double weight, String photoUrl, String species) {
         this.idPet = idPet;
         this.age = age;
         this.name = name;
         this.description = description;
+        this.species = species;
         this.weight = weight;
         this.photoUrl = photoUrl;
     }
